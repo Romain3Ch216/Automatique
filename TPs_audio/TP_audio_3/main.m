@@ -16,12 +16,13 @@ sig = apply_itd(sig,ITD,Fe);
 % N = length(hrir);
 % t =[0:N-1]/Fs;
 % Te = 1/Fs;
-h_g = hrir(:,1)/max(hrir(:,1));
-h_d = hrir(:,2)/max(hrir(:,2));
+h_g = hrir(:,1);%/max(hrir(:,1));
+h_d = hrir(:,2);%/max(hrir(:,1));
 
 sources.signaux = {h_g, h_d};
 sources.freq = {Fs, Fs};
 sources.titres = {'HRIR gauche', 'HRIR droite'};
+sources.titres_2 = {'HRTF gauche', 'HRTF droite'};
 
 cd ../audio_functions
 [N_array,T_array,F_array,Gain,gain_ITF,phase_ITF] = plot_HRIR_HRTR_ITF(sources);
@@ -143,18 +144,8 @@ tt = [-t(end:-1:2),t];
 subplot(2,1,2);
 plot(tt,r);
 
-%ITD = ITD_woodworth(13/100,340,deg2rad(90));
 
-theta = [-pi:0.001:pi];
-for i=1:length(theta)
-    array_itd(i) = ITD_woodworth(0.13,340,theta(i));
-end
-
-yy = 5.89e-4*ones(length(theta));
-figure();
-plot(theta,array_itd);hold on;
-plot(theta,yy);
-
+[ITD,x,y] = ITD_woodworth(0.13,340,5.89e-4);
 
 
 

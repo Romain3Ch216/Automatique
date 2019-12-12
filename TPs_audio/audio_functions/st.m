@@ -1,12 +1,14 @@
 function [t,f,tfd,sd] = st(s,Fs,Nf)
+    %s le signal, Fs la fréquence d'échantillonage, Nf le nb de fenêtre
     sd = [];
     N = length(s);
     for i=1:Nf
-        sd = [sd s(1+floor(N/Nf)*(i-1):i*floor(N/Nf))];
+        sd = [sd s(1+floor(N/Nf)*(i-1):i*floor(N/Nf))];%on découpe le signal
     end
     tfd = [];
     n = length(sd(:,1));
     Amax = max(abs(fft(s)));
+    %on calcule les spectres pour chaque fenetre 
     for i=1:Nf
         fft_s = abs(fft(sd(:,i)));
         fft_s = fft_s(1:floor(n/2));
@@ -15,7 +17,7 @@ function [t,f,tfd,sd] = st(s,Fs,Nf)
             if fft_s(i)<1e-2
                 fft_s(i) = -100;
             else
-                fft_s(i) = 20*log(fft_s(i)/Amax)/log(10);
+                fft_s(i) = 20*log(fft_s(i)/Amax)/log(10); %normalisation par le max
             end
         end
         tfd = [tfd fft_s];
